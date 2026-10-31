@@ -9,7 +9,7 @@ export type Item = {
   name: string;
   dependencies?: string[];
   registryDependencies?: string[];
-  files: { path: string }[];
+  files: { path: string; target?: string }[];
 };
 
 /** The only npm packages an item may depend on. */
@@ -46,6 +46,13 @@ export function problemsWith(item: Item, sources: Record<string, string>): strin
       .replace(/\.[^.]+$/, ""),
   );
 
+  // shadcn puts a target under src/ in a project that has one, unless it
+  // starts with ~/ (the project's root): public files need ~/.
+  for (const file of item.files) {
+    if (file.target?.startsWith("public/")) {
+      problems.push(`${item.name}: ${file.path} targets ${file.target}; use ~/${file.target}`);
+    }
+  }
   for (const name of listed) {
     if (!ALLOWED_PACKAGES.includes(packageOf(name))) {
       problems.push(`${item.name}: depends on ${name}, which isn't allowed`);

@@ -25,7 +25,7 @@
         {
           "path": "registry/public/theme-init.js",
           "type": "registry:file",
-          "target": "public/theme-init.js"
+          "target": "~/public/theme-init.js"
         }
       ]
     },

@@ -28,7 +28,8 @@ step() {
 
 port=4321
 project="$(mktemp -d)"
-trap 'kill "$server" 2>/dev/null || true; rm -rf "$project"' EXIT
+# Stop the server quietly (waiting for it keeps bash from announcing it), and clean up.
+trap 'kill "$server" 2>/dev/null || true; wait "$server" 2>/dev/null || true; rm -rf "$project"' EXIT
 
 python3 -m http.server "$port" --directory public >/dev/null 2>&1 &
 server=$!

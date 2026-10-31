@@ -63,6 +63,17 @@ describe("check-standalone", () => {
     ).toEqual([]);
   });
 
+  it("wants ~/ on a public file's target, as shadcn would put it under src/", () => {
+    const item = (target: string) => ({
+      name: "theme-init",
+      files: [{ path: "registry/public/theme-init.js", target }],
+    });
+    expect(problemsWith(item("public/theme-init.js"), {})).toEqual([
+      "theme-init: registry/public/theme-init.js targets public/theme-init.js; use ~/public/theme-init.js",
+    ]);
+    expect(problemsWith(item("~/public/theme-init.js"), {})).toEqual([]);
+  });
+
   it("leaves stylesheets alone, whose comments may show an @import", () => {
     expect(
       problemsWith(
