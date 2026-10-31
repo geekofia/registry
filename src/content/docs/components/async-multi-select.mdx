@@ -1,0 +1,54 @@
+---
+title: Async multi-select
+description: Several options from a server search, as chips, with an optional All option.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import AsyncMultiSelectDemo from "../../../components/demos/async-multi-select";
+
+<Demo>
+  <AsyncMultiSelectDemo client:load />
+</Demo>
+
+- Searches from the second letter, debounced; a newer search cancels an older one through its
+  `signal`.
+- With `all`, the list starts with that option, ticked while nothing is chosen. Ticking it clears
+  the choice; choosing something unticks it.
+- Escape keeps the choice. Base UI's combobox would clear it, which with `all` silently means
+  everyone; here Escape passes on, e.g. to close a dialog.
+
+## Usage
+
+```tsx
+import { AsyncMultiSelect, type Option } from "@/components/async-multi-select";
+
+const search = async (query: string, signal: AbortSignal): Promise<Option[]> => {
+  const response = await fetch(`/api/orgs?search=${encodeURIComponent(query)}`, { signal });
+  return (await response.json()).map((org) => ({
+    id: org.id,
+    label: org.name,
+    description: org.slug,
+  }));
+};
+
+<AsyncMultiSelect
+  id="orgs"
+  value={chosen}
+  onChange={setChosen}
+  search={search}
+  all="All organizations"
+/>;
+```
+
+| Prop                | Default | What                                               |
+| ------------------- | ------- | -------------------------------------------------- |
+| `value`, `onChange` |         | The chosen options (`{ id, label, description? }`) |
+| `search`            |         | `(query, signal) => Promise<Option[]>`             |
+| `all`               |         | The label of an "all of them" first option         |
+| `minQueryLength`    | `2`     | Letters before searching                           |
+| `debounceMs`        | `250`   | Wait after typing                                  |
+| `invalid`           |         | Marks it invalid                                   |
+| `labels`            | English | Placeholder, no matches, hint, remove              |
+
+<Install item="async-multi-select" />

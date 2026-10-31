@@ -1,0 +1,21 @@
+---
+title: useMediaQuery
+description: Whether a media query matches, kept up to date, and useIsMobile.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import { MediaQueryDemo } from "../../../components/demos/hooks";
+
+<Demo>
+  <MediaQueryDemo client:load />
+</Demo>
+
+```tsx
+import { useIsMobile, useMediaQuery } from "@/hooks/use-media-query";
+
+const reduced = useMediaQuery("(prefers-reduced-motion: reduce)");
+const mobile = useIsMobile(); // narrower than 768px, Tailwind's md; useIsMobile(1024) for lg
+```
+
+<Install item="use-media-query" />

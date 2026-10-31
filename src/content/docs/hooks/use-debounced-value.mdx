@@ -1,0 +1,21 @@
+---
+title: useDebouncedValue
+description: A value, once it has stopped changing for a while.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import { DebouncedValueDemo } from "../../../components/demos/hooks";
+
+<Demo>
+  <DebouncedValueDemo client:load />
+</Demo>
+
+```tsx
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
+
+const term = useDebouncedValue(search, 300);
+useEffect(() => void fetchResults(term), [term]);
+```
+
+<Install item="use-debounced-value" />

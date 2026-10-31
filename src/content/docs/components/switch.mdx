@@ -1,0 +1,28 @@
+---
+title: Switch
+description: An on/off switch, Base UI's, with shadcn's colours.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import SwitchDemo from "../../../components/demos/switch";
+
+<Demo>
+  <SwitchDemo client:load />
+</Demo>
+
+## Usage
+
+```tsx
+import { Switch } from "@/components/switch";
+
+<label className="flex items-center gap-3">
+  <Switch checked={on} onCheckedChange={setOn} />
+  Notifications
+</label>;
+```
+
+It takes Base UI's `Switch.Root` props (`checked`, `defaultChecked`, `onCheckedChange`,
+`disabled`, `name`, …). Name it with a wrapping `<label>`, or `id` and `<label htmlFor>`.
+
+<Install item="switch" />

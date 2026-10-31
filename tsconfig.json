@@ -22,5 +22,5 @@
       "@/lib/*": ["./registry/lib/*"]
     }
   },
-  "include": ["registry", "site/src", "scripts", "vite.config.ts", "test"]
+  "include": ["registry", "src/components", "scripts", "vitest.config.ts", "test"]
 }

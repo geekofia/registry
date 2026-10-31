@@ -1,0 +1,44 @@
+---
+title: Announcement banner
+description: A banner or notice in one of five tones, folding long text, with an optional Close.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import AnnouncementDemo from "../../../components/demos/announcement";
+
+<Demo>
+  <AnnouncementDemo client:load />
+</Demo>
+
+- Five tones (neutral, info, success, warning, critical), each with its own icon, so the meaning
+  never rests on colour alone. An unknown tone shows as info.
+- A banner folds a long body (past `foldAfter` characters, or more than one paragraph or list) to
+  two lines with Show more. A notice shows it in full.
+- Stacking banners? Put a line between them: `<div className="divide-y border-b">`.
+
+## Usage
+
+```tsx
+import { Announcement } from "@/components/announcement-banner";
+
+<Announcement
+  tone="warning"
+  variant="banner"
+  title="Maintenance tonight"
+  body="We're down **2–3 am**."
+  onDismiss={() => dismiss(id)}
+/>;
+```
+
+| Prop        | Default    | What                                                      |
+| ----------- | ---------- | --------------------------------------------------------- |
+| `title`     |            | On its own line, bold                                     |
+| `body`      |            | With [markdown lite](/registry/components/markdown-lite/) |
+| `tone`      | `"info"`   | neutral, info, success, warning, critical                 |
+| `variant`   | `"banner"` | banner or notice                                          |
+| `onDismiss` |            | Shows Close                                               |
+| `foldAfter` | `180`      | Characters before a banner folds                          |
+| `labels`    | English    | Close, Show more, Show less                               |
+
+<Install item="announcement-banner" />

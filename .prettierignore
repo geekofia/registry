@@ -1,5 +1,8 @@
 node_modules
 dist
-site/public/r
+public/r
 package-lock.json
-site/public/theme-init.js
+public/theme-init.js
+.astro
+# No Astro plugin for Prettier here.
+*.astro

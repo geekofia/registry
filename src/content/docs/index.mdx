@@ -1,0 +1,33 @@
+---
+title: "@geekofia registry"
+description: Reusable React components for shadcn and Tailwind v4 projects.
+template: splash
+hero:
+  tagline: Reusable React components for shadcn and Tailwind v4 projects. Each one stands alone, MIT licensed.
+  actions:
+    - text: Get started
+      link: /registry/getting-started/
+      icon: right-arrow
+    - text: GitHub
+      link: https://github.com/geekofia/registry
+      icon: github
+      variant: minimal
+---
+
+import { Card, CardGrid } from "@astrojs/starlight/components";
+
+<CardGrid>
+  <Card title="With or without shadcn" icon="puzzle">
+    Install with `npx shadcn add @geekofia/...`, or copy the source into any Tailwind v4 project.
+  </Card>
+  <Card title="Stands alone" icon="seti:react">
+    React, Tailwind, and at most Base UI, lucide-react and TanStack Table. Never shadcn's
+    `components/ui`.
+  </Card>
+  <Card title="Tested" icon="approve-check">
+    Every item has its tests in the registry, and CI checks each one installs cleanly.
+  </Card>
+  <Card title="Yours to change" icon="pencil">
+    Items are copied into your project, not imported from a package: edit them freely.
+  </Card>
+</CardGrid>

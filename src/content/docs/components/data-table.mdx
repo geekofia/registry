@@ -1,0 +1,58 @@
+---
+title: Data table
+description: A server-driven table with debounced search, sorting and next/previous pages.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import DataTableDemo from "../../../components/demos/data-table";
+
+<Demo>
+  <DataTableDemo client:load />
+</Demo>
+
+The rows come from your server, so search, sorting and paging are yours: keep them in the URL with
+[useCursorTableParams](/registry/hooks/use-cursor-table-params/). Pages go next and previous, as
+with cursor pagination. Columns are TanStack Table's; `meta: { className: "hidden md:table-cell" }`
+keeps a column off a phone.
+
+## Usage
+
+```tsx
+import { DataTable, type DataTableColumn } from "@/components/data-table";
+
+const columns: DataTableColumn<Person>[] = [
+  {
+    accessorKey: "name",
+    header: "Name",
+    cell: ({ row }) => <Link to={row.original.id}>{row.original.name}</Link>,
+  },
+  {
+    accessorKey: "email",
+    header: "Email",
+    enableSorting: false,
+    meta: { className: "hidden md:table-cell" },
+  },
+];
+
+<DataTable
+  columns={columns}
+  data={page.nodes}
+  isLoading={query.isLoading}
+  search={params.search}
+  onSearchChange={params.setSearch}
+  sorting={sorting}
+  onSortingChange={setSorting}
+  hasNextPage={page.hasNextPage}
+  hasPreviousPage={page.hasPreviousPage}
+  onNextPage={() => params.goToNextPage(page.endCursor)}
+  onPreviousPage={() => params.goToPreviousPage(page.startCursor)}
+  emptyMessage="No one yet."
+  onRowClick={(person) => navigate(person.id)}
+/>;
+```
+
+`onRowClick` makes rows clickable; links and buttons inside a row still act on their own. Give each
+row a real link too, for keyboards. `labels` translates loading, error, previous and next.
+
+<Install item="data-table" />

@@ -1,0 +1,20 @@
+---
+title: Tokens
+description: shadcn's colour and radius tokens, light and dark, for Tailwind-only projects.
+---
+
+import Install from "../../../components/Install.astro";
+
+The items use shadcn's colour names: `bg-background`, `text-foreground`, `bg-muted`, `border`,
+`ring` and so on. shadcn projects already have them. In a Tailwind-only project, import this file
+after Tailwind and they work the same, light and dark (with a `dark` class on `<html>`, as the
+[theme provider](/registry/components/theme-provider/) sets).
+
+It also sets `color-scheme`, so date pickers and scrollbars are drawn for the theme in use.
+
+```css title="src/index.css"
+@import "tailwindcss";
+@import "./styles/tokens.css";
+```
+
+<Install item="tokens" />

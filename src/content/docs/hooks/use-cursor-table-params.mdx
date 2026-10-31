@@ -1,0 +1,30 @@
+---
+title: useCursorTableParams
+description: A server table's search, sort, page size and cursor, kept in the URL, with any router.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import { CursorTableParamsDemo } from "../../../components/demos/hooks";
+
+<Demo>
+  <CursorTableParamsDemo client:load />
+</Demo>
+
+Cursors only go next or previous, so there's no page number, and a new search, sort or page size
+goes back to the first page, as an old cursor wouldn't line up with the new results. Pairs with the
+[data table](/registry/components/data-table/).
+
+```tsx
+import { useSearchParams } from "react-router";
+import { useCursorTableParams } from "@/hooks/use-cursor-table-params";
+
+const params = useCursorTableParams(useSearchParams(), { defaultPerPage: 20 });
+// params.search, sortDirection, perPage, after, before
+// params.setSearch, setSortDirection, setPerPage, goToNextPage, goToPreviousPage
+```
+
+Any router works: pass `[searchParams, (update) => …]`, where `update` takes the current params and
+returns the next.
+
+<Install item="use-cursor-table-params" />

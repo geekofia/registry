@@ -1,0 +1,32 @@
+---
+title: Markdown lite
+description: Bold, lists and paragraphs from text people type, drawn as data, never HTML.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import MarkdownLiteDemo from "../../../components/demos/markdown-lite";
+
+<Demo>
+  <MarkdownLiteDemo client:load />
+</Demo>
+
+For text your users write, like announcements or notes: `**bold**`, lists (`- `, `* ` or `1. ` at
+the start of a line) and blank lines between paragraphs, with single line breaks kept. Anything
+else shows as typed. It's parsed into data and drawn by React, so HTML in the text can't run.
+
+## Usage
+
+```tsx
+import { MarkdownLite } from "@/components/markdown-lite";
+import { plainText } from "@/lib/markdown-lite";
+
+<MarkdownLite text={note.body} className="text-sm" />;
+
+// One plain line, e.g. for a list or a folded preview:
+plainText(note.body);
+```
+
+`parseMarkdownLite(text)` gives the parsed blocks if you want to draw them yourself.
+
+<Install item="markdown-lite" />

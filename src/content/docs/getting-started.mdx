@@ -1,0 +1,54 @@
+---
+title: Getting started
+description: Use the registry with shadcn, or in a Tailwind-only project.
+---
+
+import { Steps, Tabs, TabItem } from "@astrojs/starlight/components";
+
+Items are copied into your project, like shadcn's own components. Each one stands alone: React,
+Tailwind v4, and at most [Base UI](https://base-ui.com), lucide-react and TanStack Table.
+
+<Tabs syncKey="install">
+  <TabItem label="shadcn">
+    <Steps>
+
+    1. Add the registry to `components.json`, once:
+
+       ```json title="components.json"
+       "registries": {
+         "@geekofia": "https://geekofia.github.io/registry/r/{name}.json"
+       }
+       ```
+
+    2. Add items. shadcn installs their packages and the items they need:
+
+       ```sh
+       npx shadcn@latest add @geekofia/theme-toggle
+       ```
+
+    </Steps>
+
+  </TabItem>
+  <TabItem label="Tailwind only">
+    <Steps>
+
+    1. Copy [tokens](/registry/components/tokens/) into your project and import it after Tailwind,
+       so the items' colours (`bg-muted`, `text-foreground`, …) work:
+
+       ```css title="src/index.css"
+       @import "tailwindcss";
+       @import "./styles/tokens.css";
+       ```
+
+    2. Copy an item's files from its page, and install the packages it lists.
+
+    3. Items import each other as `@/components/...`, `@/hooks/...` and `@/lib/...`. Point that
+       alias at your source folder, or change the imports.
+
+    </Steps>
+
+  </TabItem>
+</Tabs>
+
+Every item's JSON is at `https://geekofia.github.io/registry/r/<name>.json`, and the whole list at
+[`/r/registry.json`](/registry/r/registry.json).

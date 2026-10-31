@@ -30,7 +30,7 @@ port=4321
 project="$(mktemp -d)"
 trap 'kill "$server" 2>/dev/null || true; rm -rf "$project"' EXIT
 
-python3 -m http.server "$port" --directory site/public >/dev/null 2>&1 &
+python3 -m http.server "$port" --directory public >/dev/null 2>&1 &
 server=$!
 sleep 1
 

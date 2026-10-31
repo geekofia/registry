@@ -1,0 +1,79 @@
+---
+/**
+ * How to install an item, from registry.json: with shadcn, or by hand in a
+ * Tailwind-only project (its packages, the items it needs, and its files'
+ * source, read at build).
+ */
+import { Code, TabItem, Tabs } from "@astrojs/starlight/components";
+import registry from "../../registry.json";
+
+interface Props {
+  item: string;
+}
+
+type File = { path: string; type: string; target?: string };
+type Item = {
+  name: string;
+  dependencies?: string[];
+  registryDependencies?: string[];
+  files: File[];
+};
+
+const { item: name } = Astro.props;
+const item = (registry.items as Item[]).find((each) => each.name === name);
+if (!item) throw new Error(`No item named ${name} in registry.json`);
+
+const sources = import.meta.glob<string>("../../registry/**/*.{ts,tsx,js,css}", {
+  query: "?raw",
+  import: "default",
+  eager: true,
+});
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const needs = (item.registryDependencies ?? []).map((each) => each.replace("@geekofia/", ""));
+const where = (file: File) =>
+  file.target ??
+  file.path.replace(/^registry\//, "").replace(/^(components|hooks|lib)\//, "$1/");
+const language = (path: string) => path.split(".").at(-1) ?? "ts";
+---
+
+<Tabs syncKey="install">
+  <TabItem label="shadcn">
+    <Code code={`npx shadcn@latest add @geekofia/${item.name}`} lang="sh" />
+    <p>
+      Once the <a href={`${base}/getting-started/`}>registry is in components.json</a>; shadcn
+      installs the packages and items it needs too.
+    </p>
+  </TabItem>
+  <TabItem label="Tailwind only">
+    {
+      item.dependencies && (
+        <Code code={`npm install ${item.dependencies.join(" ")}`} lang="sh" />
+      )
+    }
+    {
+      needs.length > 0 && (
+        <p>
+          Needs{" "}
+          {needs.map((each, index) => (
+            <>
+              {index > 0 && ", "}
+              <a href={`${base}/${each.startsWith("use-") ? "hooks" : "components"}/${each}/`}>
+                {each}
+              </a>
+            </>
+          ))}{" "}
+          too, and <a href={`${base}/components/tokens/`}>tokens</a> for its colours.
+        </p>
+      )
+    }
+    {
+      item.files.map((file) => (
+        <Code
+          code={sources[`../../${file.path}`] ?? ""}
+          lang={language(file.path)}
+          title={where(file)}
+        />
+      ))
+    }
+  </TabItem>
+</Tabs>

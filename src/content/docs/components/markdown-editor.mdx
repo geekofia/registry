@@ -1,0 +1,48 @@
+---
+title: Markdown editor
+description: Write and Preview tabs with a toolbar for bold and lists, like a GitHub comment.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import MarkdownEditorDemo from "../../../components/demos/markdown-editor";
+
+<Demo>
+  <MarkdownEditorDemo client:load />
+</Demo>
+
+- Bold and the list buttons add [markdown lite](/registry/components/markdown-lite/)'s syntax
+  around the selection, and take it off again.
+- The toolbar stays on Preview, so your own controls there (`toolbar`) can change what's
+  previewed. On a narrow screen the tools scroll sideways beside the tabs.
+
+## Usage
+
+```tsx
+import { MarkdownEditor } from "@/components/markdown-editor";
+
+<MarkdownEditor
+  value={body}
+  onChange={setBody}
+  title={title}
+  onTitleChange={setTitle}
+  maxLength={1000}
+  toolbar={<MyToneButtons />}
+  preview={<MyBanner title={title} body={body} />}
+  footer={`${1000 - body.length} characters left`}
+/>;
+```
+
+| Prop                          | What                                                         |
+| ----------------------------- | ------------------------------------------------------------ |
+| `value`, `onChange`           | The text                                                     |
+| `title`, `onTitleChange`      | An optional title field, shown when `onTitleChange` is given |
+| `maxLength`, `titleMaxLength` | Limits                                                       |
+| `toolbar`                     | More controls at the end of the toolbar                      |
+| `preview`                     | What Preview shows; the title and markdown lite by default   |
+| `footer`                      | Under the editor, e.g. a hint or a count                     |
+| `labels`                      | Every label, to translate it                                 |
+
+`ToolbarTip` (exported too) wraps your own toolbar buttons in the same tooltip.
+
+<Install item="markdown-editor" />

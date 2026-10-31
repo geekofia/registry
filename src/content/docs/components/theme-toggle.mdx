@@ -1,0 +1,25 @@
+---
+title: Theme toggle
+description: A button showing the theme on screen, with a menu to choose Light, Dark or System.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import ThemeDemo from "../../../components/demos/theme";
+
+<Demo>
+  <ThemeDemo client:load />
+</Demo>
+
+## Usage
+
+```tsx
+import { ThemeToggle } from "@/components/theme-toggle";
+
+<ThemeToggle labels={{ toggle: "Thème", light: "Clair", dark: "Sombre", system: "Système" }} />;
+```
+
+Inside a [theme provider](/registry/components/theme-provider/). `labels` translates it;
+`className` is added to the button.
+
+<Install item="theme-toggle" />

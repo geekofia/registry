@@ -1,0 +1,45 @@
+---
+title: Theme provider
+description: Light, dark or the system's theme as a class on <html>, saved, and following the OS.
+---
+
+import Demo from "../../../components/Demo.astro";
+import Install from "../../../components/Install.astro";
+import ThemeDemo from "../../../components/demos/theme";
+
+<Demo>
+  <ThemeDemo client:load />
+</Demo>
+
+This demo shares its setting with these docs' own theme picker, top right.
+
+- System follows the OS as it changes, and stops listening when Light or Dark is chosen.
+- An unknown saved value, or blocked storage, falls back to the default.
+- Pair it with [theme init](/registry/components/theme-init/) to avoid a light flash.
+
+## Usage
+
+```tsx
+import { ThemeProvider, useTheme } from "@/components/theme-provider";
+
+createRoot(root).render(
+  <ThemeProvider storageKey="theme" defaultTheme="system">
+    <App />
+  </ThemeProvider>,
+);
+
+function Logo() {
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  return <img src={resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg"} />;
+}
+```
+
+| Prop           | Default    | What                                     |
+| -------------- | ---------- | ---------------------------------------- |
+| `storageKey`   | `"theme"`  | The localStorage key; same as theme-init |
+| `defaultTheme` | `"system"` | Used when nothing (valid) is saved       |
+
+`useTheme()` gives `theme` (chosen), `resolvedTheme` (`light` or `dark`, on screen now) and
+`setTheme`.
+
+<Install item="theme-provider" />

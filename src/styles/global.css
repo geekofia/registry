@@ -1,0 +1,11 @@
+/* Tailwind in Starlight, as @astrojs/starlight-tailwind lays it out, then the
+   registry's own tokens, so the demos look as they do in a project. */
+@layer base, starlight, theme, components, utilities;
+
+@import "@astrojs/starlight-tailwind";
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+@import "../../registry/styles/tokens.css";
+
+@source "../../registry";
+@source "../components";
