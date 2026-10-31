@@ -47,7 +47,7 @@
       "type": "registry:component",
       "title": "Theme toggle",
       "description": "A button showing the theme on screen, with a menu to choose Light, Dark or System.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
+      "dependencies": ["@base-ui/react", "lucide-react", "tailwind-merge"],
       "registryDependencies": ["@geekofia/theme-provider"],
       "files": [
         {
@@ -113,7 +113,7 @@
       "type": "registry:component",
       "title": "Markdown editor",
       "description": "Write and Preview tabs with a toolbar for bold and lists, an optional title, and room for your own controls.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
+      "dependencies": ["@base-ui/react", "lucide-react", "tailwind-merge"],
       "registryDependencies": ["@geekofia/markdown-lite"],
       "files": [
         {
@@ -131,7 +131,7 @@
       "type": "registry:component",
       "title": "Announcement banner",
       "description": "A banner or notice in one of five tones, with a little Markdown, folding long text, and an optional Close.",
-      "dependencies": ["lucide-react"],
+      "dependencies": ["lucide-react", "tailwind-merge"],
       "registryDependencies": ["@geekofia/markdown-lite"],
       "files": [
         {
@@ -145,7 +145,7 @@
       "type": "registry:component",
       "title": "Async multi-select",
       "description": "Several options from a server search, as chips, with an optional All option; Escape keeps the choice.",
-      "dependencies": ["@base-ui/react", "lucide-react"],
+      "dependencies": ["@base-ui/react", "lucide-react", "tailwind-merge"],
       "registryDependencies": ["@geekofia/use-debounced-value"],
       "files": [
         {
@@ -159,7 +159,7 @@
       "type": "registry:component",
       "title": "Switch",
       "description": "An on/off switch: Base UI's, with shadcn's colours.",
-      "dependencies": ["@base-ui/react"],
+      "dependencies": ["@base-ui/react", "tailwind-merge"],
       "files": [
         {
           "path": "registry/components/switch.tsx",
@@ -172,7 +172,7 @@
       "type": "registry:component",
       "title": "Data table",
       "description": "A server-driven table: debounced search, sorting and next/previous pages, on TanStack Table.",
-      "dependencies": ["@tanstack/react-table", "lucide-react"],
+      "dependencies": ["@tanstack/react-table", "lucide-react", "tailwind-merge"],
       "registryDependencies": ["@geekofia/use-debounced-value"],
       "files": [
         {

@@ -52,3 +52,14 @@ Tailwind v4, and at most [Base UI](https://base-ui.com), lucide-react and TanSta
 
 Every item's JSON is at `https://geekofia.github.io/registry/r/<name>.json`, and the whole list at
 [`/r/registry.json`](/registry/r/registry.json).
+
+## Matching your design
+
+Every styled item takes a `classNames` prop with a key per part (`search`, `pageButton`, `chips`,
+`trigger`, …). They're merged with the item's own classes by
+[tailwind-merge](https://github.com/dcastil/tailwind-merge), so yours win: pass your shapes once and
+updates to the item never undo them.
+
+```tsx
+<DataTable classNames={{ search: "rounded-full", pageButton: "rounded-full" }} {...props} />
+```

@@ -6,16 +6,16 @@ description: Sets the theme's class before the app starts, so a dark theme doesn
 import Install from "../../../components/Install.astro";
 
 React runs after the first paint, so without this a dark theme flashes light on every load. Load it
-from `<head>`, before your app's script:
+from `<head>`, before your app's script, with the [theme provider](/registry/components/theme-provider/)'s
+key and default if they aren't `theme` and `system`:
 
 ```html title="index.html"
 <head>
-  <script src="/theme-init.js"></script>
+  <script src="/theme-init.js" data-storage-key="app-theme" data-default-theme="system"></script>
 </head>
 ```
 
-It's a file rather than inline, so a Content-Security-Policy of `script-src 'self'` allows it. Keep
-its `STORAGE_KEY` and `DEFAULT_THEME` the same as the [theme provider](/registry/components/theme-provider/)'s
-(`theme` and `system` by default).
+It's a file rather than inline, so a Content-Security-Policy of `script-src 'self'` allows it, and its
+settings live on the tag, so the file never needs editing.
 
 <Install item="theme-init" />

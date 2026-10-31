@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Combobox } from "@base-ui/react/combobox";
 import { CheckIcon, XIcon } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
 export type Option = { id: string; label: string; description?: string };
@@ -21,6 +22,15 @@ const ENGLISH: AsyncMultiSelectLabels = {
 
 const ALL_ID = "\u0000all";
 
+/** Classes for its parts, winning over its own. */
+export type AsyncMultiSelectClassNames = {
+  chips?: string;
+  chip?: string;
+  input?: string;
+  popup?: string;
+  item?: string;
+};
+
 /**
  * Choosing several options from a server search: one field, those chosen as
  * chips in it, and matches from `search` once `minQueryLength` letters are
@@ -39,6 +49,7 @@ export function AsyncMultiSelect({
   debounceMs = 250,
   invalid,
   labels = ENGLISH,
+  classNames = {},
 }: {
   id?: string;
   value: Option[];
@@ -50,6 +61,7 @@ export function AsyncMultiSelect({
   debounceMs?: number;
   invalid?: boolean;
   labels?: AsyncMultiSelectLabels;
+  classNames?: AsyncMultiSelectClassNames;
 }) {
   const [query, setQuery] = useState("");
   const [found, setFound] = useState<{ query: string; options: Option[] }>({
@@ -112,7 +124,10 @@ export function AsyncMultiSelect({
       <Combobox.Chips
         ref={anchor}
         aria-invalid={invalid}
-        className="border-input focus-within:border-ring focus-within:ring-ring/50 aria-invalid:border-destructive flex min-h-9 flex-wrap items-center gap-1.5 rounded-xl border bg-transparent px-2 py-1.5 text-sm focus-within:ring-[3px]"
+        className={twMerge(
+          "border-input focus-within:border-ring focus-within:ring-ring/50 aria-invalid:border-destructive flex min-h-9 flex-wrap items-center gap-1.5 rounded-xl border bg-transparent px-2 py-1.5 text-sm focus-within:ring-[3px] pointer-coarse:min-h-11",
+          classNames.chips,
+        )}
       >
         <Combobox.Value>
           {(values: Option[]) => (
@@ -120,7 +135,10 @@ export function AsyncMultiSelect({
               {values.map((each) => (
                 <Combobox.Chip
                   key={each.id}
-                  className="bg-muted text-foreground flex h-6 items-center gap-1 rounded-full pr-1 pl-2.5 text-xs font-medium"
+                  className={twMerge(
+                    "bg-muted text-foreground flex h-6 items-center gap-1 rounded-full pr-1 pl-2.5 text-xs font-medium",
+                    classNames.chip,
+                  )}
                 >
                   {each.label}
                   {each.id !== ALL_ID && (
@@ -137,7 +155,10 @@ export function AsyncMultiSelect({
                 id={id}
                 aria-invalid={invalid}
                 placeholder={values.length === 0 ? labels.placeholder : ""}
-                className="placeholder:text-muted-foreground min-w-16 flex-1 bg-transparent px-1 outline-none"
+                className={twMerge(
+                  "placeholder:text-muted-foreground min-w-16 flex-1 bg-transparent px-1 outline-none",
+                  classNames.input,
+                )}
               />
             </>
           )}
@@ -145,7 +166,12 @@ export function AsyncMultiSelect({
       </Combobox.Chips>
       <Combobox.Portal>
         <Combobox.Positioner anchor={anchor} sideOffset={6} className="z-50">
-          <Combobox.Popup className="bg-popover text-popover-foreground ring-foreground/10 max-h-(--available-height) w-(--anchor-width) overflow-hidden rounded-xl text-sm shadow-lg ring-1">
+          <Combobox.Popup
+            className={twMerge(
+              "bg-popover text-popover-foreground ring-foreground/10 max-h-(--available-height) w-(--anchor-width) overflow-hidden rounded-xl text-sm shadow-lg ring-1",
+              classNames.popup,
+            )}
+          >
             <Combobox.Empty className="text-muted-foreground px-3 py-2 empty:hidden">
               {searching ? labels.noMatch : null}
             </Combobox.Empty>
@@ -154,7 +180,10 @@ export function AsyncMultiSelect({
                 <Combobox.Item
                   key={item.id}
                   value={item}
-                  className="data-highlighted:bg-muted relative flex cursor-default items-center gap-2 rounded-lg py-1.5 pr-8 pl-2 outline-none select-none"
+                  className={twMerge(
+                    "data-highlighted:bg-muted relative flex cursor-default items-center gap-2 rounded-lg py-1.5 pr-8 pl-2 outline-none select-none pointer-coarse:py-2.5",
+                    classNames.item,
+                  )}
                 >
                   <span className="truncate">{item.label}</span>
                   {item.description && (

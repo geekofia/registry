@@ -2,6 +2,7 @@ import { useRef, useState, type ReactElement, type ReactNode } from "react";
 import { Tabs } from "@base-ui/react/tabs";
 import { Tooltip } from "@base-ui/react/tooltip";
 import { BoldIcon, ListIcon, ListOrderedIcon } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 import { MarkdownLite } from "@/components/markdown-lite";
 import { toggleBold, toggleList, type Edit } from "@/lib/markdown-shortcuts";
 
@@ -31,14 +32,39 @@ const ENGLISH: MarkdownEditorLabels = {
   empty: "Nothing to preview.",
 };
 
+/** Classes for its parts, winning over its own. */
+export type MarkdownEditorClassNames = {
+  root?: string;
+  toolbar?: string;
+  tab?: string;
+  tool?: string;
+  tooltip?: string;
+  title?: string;
+  body?: string;
+  footer?: string;
+};
+
 /** A toolbar control, named in a tooltip. */
-export function ToolbarTip({ tip, children }: { tip: ReactNode; children: ReactElement }) {
+export function ToolbarTip({
+  tip,
+  children,
+  className,
+}: {
+  tip: ReactNode;
+  children: ReactElement;
+  className?: string;
+}) {
   return (
     <Tooltip.Root>
       <Tooltip.Trigger render={children} />
       <Tooltip.Portal>
         <Tooltip.Positioner sideOffset={6} className="z-50">
-          <Tooltip.Popup className="bg-foreground text-background max-w-xs rounded-lg px-2.5 py-1.5 text-xs">
+          <Tooltip.Popup
+            className={twMerge(
+              "bg-foreground text-background max-w-xs rounded-lg px-2.5 py-1.5 text-xs",
+              className,
+            )}
+          >
             {tip}
           </Tooltip.Popup>
         </Tooltip.Positioner>
@@ -48,7 +74,7 @@ export function ToolbarTip({ tip, children }: { tip: ReactNode; children: ReactE
 }
 
 const TOOL =
-  "text-foreground hover:bg-muted focus-visible:ring-ring/50 inline-flex size-8 shrink-0 items-center justify-center rounded-lg outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4";
+  "text-foreground hover:bg-muted focus-visible:ring-ring/50 inline-flex size-8 shrink-0 items-center justify-center rounded-lg outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 pointer-coarse:size-10";
 const TAB =
   "text-muted-foreground hover:text-foreground data-active:text-foreground relative h-full px-3 text-sm font-medium outline-none after:absolute after:inset-x-0 after:-bottom-px after:h-0.5 after:bg-foreground after:opacity-0 data-active:after:opacity-100 focus-visible:ring-ring/50 focus-visible:ring-[3px]";
 
@@ -71,7 +97,7 @@ export function MarkdownEditor({
   preview,
   footer,
   labels = ENGLISH,
-  className = "",
+  classNames = {},
 }: {
   value: string;
   onChange: (value: string) => void;
@@ -86,7 +112,7 @@ export function MarkdownEditor({
   /** Under the editor, e.g. a hint or how many characters are left. */
   footer?: ReactNode;
   labels?: MarkdownEditorLabels;
-  className?: string;
+  classNames?: MarkdownEditorClassNames;
 }) {
   const [tab, setTab] = useState<"write" | "preview">("write");
   const field = useRef<HTMLTextAreaElement>(null);
@@ -109,10 +135,10 @@ export function MarkdownEditor({
   };
 
   const tool = (label: string, icon: ReactNode, change: (edit: Edit) => Edit) => (
-    <ToolbarTip tip={label}>
+    <ToolbarTip tip={label} className={classNames.tooltip}>
       <button
         type="button"
-        className={TOOL}
+        className={twMerge(TOOL, classNames.tool)}
         disabled={!writing}
         aria-label={label}
         onClick={() => format(change)}
@@ -126,18 +152,24 @@ export function MarkdownEditor({
     <Tabs.Root
       value={tab}
       onValueChange={(next) => setTab(next as "write" | "preview")}
-      className={`focus-within:border-ring focus-within:ring-ring/50 flex flex-col overflow-hidden rounded-2xl border focus-within:ring-[3px] ${className}`}
+      className={twMerge(
+        "focus-within:border-ring focus-within:ring-ring/50 flex flex-col overflow-hidden rounded-2xl border focus-within:ring-[3px]",
+        classNames.root,
+      )}
     >
       <div
         role="toolbar"
         aria-label={labels.toolbar}
-        className="bg-muted/40 flex min-h-11 items-center gap-1 border-b px-2"
+        className={twMerge(
+          "bg-muted/40 flex min-h-11 items-center gap-1 border-b px-2",
+          classNames.toolbar,
+        )}
       >
         <Tabs.List className="flex shrink-0 self-stretch">
-          <Tabs.Tab value="write" className={TAB}>
+          <Tabs.Tab value="write" className={twMerge(TAB, classNames.tab)}>
             {labels.write}
           </Tabs.Tab>
-          <Tabs.Tab value="preview" className={TAB}>
+          <Tabs.Tab value="preview" className={twMerge(TAB, classNames.tab)}>
             {labels.preview}
           </Tabs.Tab>
         </Tabs.List>
@@ -160,7 +192,10 @@ export function MarkdownEditor({
             maxLength={titleMaxLength}
             value={title ?? ""}
             onChange={(event) => onTitleChange(event.target.value)}
-            className="placeholder:text-muted-foreground bg-transparent py-1 text-base font-semibold outline-none"
+            className={twMerge(
+              "placeholder:text-muted-foreground bg-transparent py-1 text-base font-semibold outline-none",
+              classNames.title,
+            )}
           />
         )}
         <textarea
@@ -170,7 +205,10 @@ export function MarkdownEditor({
           maxLength={maxLength}
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          className="placeholder:text-muted-foreground [field-sizing:content] max-h-72 min-h-40 resize-none overflow-y-auto bg-transparent py-1 text-sm outline-none"
+          className={twMerge(
+            "placeholder:text-muted-foreground [field-sizing:content] max-h-72 min-h-40 resize-none overflow-y-auto bg-transparent py-1 text-sm outline-none",
+            classNames.body,
+          )}
         />
       </Tabs.Panel>
       <Tabs.Panel value="preview" className="min-h-52 p-4 text-sm outline-none">
@@ -185,7 +223,13 @@ export function MarkdownEditor({
           ))}
       </Tabs.Panel>
 
-      {footer && <div className="text-muted-foreground border-t px-4 py-2 text-xs">{footer}</div>}
+      {footer && (
+        <div
+          className={twMerge("text-muted-foreground border-t px-4 py-2 text-xs", classNames.footer)}
+        >
+          {footer}
+        </div>
+      )}
     </Tabs.Root>
   );
 }

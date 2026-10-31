@@ -14,6 +14,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 
 export const dataTableFeatures = tableFeatures({ rowSortingFeature });
@@ -38,6 +39,15 @@ const ENGLISH: DataTableLabels = {
   next: "Next",
 };
 
+/** Classes for its parts, winning over its own. */
+export type DataTableClassNames = {
+  search?: string;
+  frame?: string;
+  head?: string;
+  cell?: string;
+  pageButton?: string;
+};
+
 /** A column's own class, from `meta: { className }`, e.g. "hidden md:table-cell". */
 const columnClassName = (columnDef: { meta?: unknown }) =>
   (columnDef.meta as { className?: string } | undefined)?.className ?? "";
@@ -45,7 +55,7 @@ const columnClassName = (columnDef: { meta?: unknown }) =>
 const INTERACTIVE = "a, button, input, select, textarea, [role='menuitem']";
 const CELL = "px-3 py-2.5 align-middle";
 const PAGE =
-  "border-input hover:bg-muted inline-flex h-8 items-center gap-1 rounded-lg border px-3 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4";
+  "border-input hover:bg-muted inline-flex h-8 items-center gap-1 rounded-lg border px-3 text-sm font-medium disabled:pointer-events-none disabled:opacity-50 [&_svg]:size-4 pointer-coarse:h-10";
 
 /**
  * A table whose rows come from a server: search, sorting and pages are the
@@ -72,6 +82,7 @@ export function DataTable<TData extends RowData>({
   emptyMessage,
   onRowClick,
   labels = ENGLISH,
+  classNames = {},
 }: {
   columns: DataTableColumn<TData>[];
   data: TData[];
@@ -91,6 +102,7 @@ export function DataTable<TData extends RowData>({
   emptyMessage: string;
   onRowClick?: (row: TData) => void;
   labels?: DataTableLabels;
+  classNames?: DataTableClassNames;
 }) {
   const [searchInput, setSearchInput] = useState(search);
   const [committedSearch, setCommittedSearch] = useState(search);
@@ -141,19 +153,26 @@ export function DataTable<TData extends RowData>({
           onChange={(event) => setSearchInput(event.target.value)}
           placeholder={searchPlaceholder}
           aria-label={searchPlaceholder}
-          className="border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-xl border bg-transparent px-3 text-sm outline-none focus-visible:ring-[3px] sm:max-w-sm"
+          className={twMerge(
+            "border-input placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 h-9 w-full rounded-xl border bg-transparent px-3 text-sm outline-none focus-visible:ring-[3px] sm:max-w-sm pointer-coarse:h-11",
+            classNames.search,
+          )}
         />
         {filters}
       </div>
 
-      <div className="overflow-x-auto rounded-lg border">
+      <div className={twMerge("overflow-x-auto rounded-lg border", classNames.frame)}>
         <table className="w-full caption-bottom text-sm">
           <thead className="[&_tr]:border-b">
             {table.getHeaderGroups().map((group) => (
               <tr key={group.id}>
                 {group.headers.map((header) => {
                   const column = header.column;
-                  const className = `text-muted-foreground h-10 px-3 text-left align-middle font-medium whitespace-nowrap ${columnClassName(column.columnDef)}`;
+                  const className = twMerge(
+                    "text-muted-foreground h-10 px-3 text-left align-middle font-medium whitespace-nowrap",
+                    classNames.head,
+                    columnClassName(column.columnDef),
+                  );
                   if (header.isPlaceholder) return <th key={header.id} className={className} />;
                   if (!column.getCanSort()) {
                     return (
@@ -219,7 +238,11 @@ export function DataTable<TData extends RowData>({
                         {row.getAllCells().map((cell) => (
                           <td
                             key={cell.id}
-                            className={`${CELL} ${columnClassName(cell.column.columnDef)}`}
+                            className={twMerge(
+                              CELL,
+                              classNames.cell,
+                              columnClassName(cell.column.columnDef),
+                            )}
                           >
                             <table.FlexRender cell={cell} />
                           </td>
@@ -231,11 +254,21 @@ export function DataTable<TData extends RowData>({
       </div>
 
       <div className="flex flex-wrap items-center justify-end gap-2">
-        <button type="button" className={PAGE} onClick={onPreviousPage} disabled={!hasPreviousPage}>
+        <button
+          type="button"
+          className={twMerge(PAGE, classNames.pageButton)}
+          onClick={onPreviousPage}
+          disabled={!hasPreviousPage}
+        >
           <ChevronLeftIcon aria-hidden />
           {labels.previous}
         </button>
-        <button type="button" className={PAGE} onClick={onNextPage} disabled={!hasNextPage}>
+        <button
+          type="button"
+          className={twMerge(PAGE, classNames.pageButton)}
+          onClick={onNextPage}
+          disabled={!hasNextPage}
+        >
           {labels.next}
           <ChevronRightIcon aria-hidden />
         </button>
