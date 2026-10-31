@@ -1,0 +1,60 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "geekofia",
+  "homepage": "https://geekofia.github.io/registry",
+  "items": [
+    {
+      "name": "tokens",
+      "type": "registry:file",
+      "title": "Tokens",
+      "description": "shadcn's colour and radius tokens, light and dark, for Tailwind projects without shadcn.",
+      "files": [
+        {
+          "path": "registry/styles/tokens.css",
+          "type": "registry:file",
+          "target": "styles/tokens.css"
+        }
+      ]
+    },
+    {
+      "name": "theme-init",
+      "type": "registry:file",
+      "title": "Theme init",
+      "description": "Sets the theme's class on <html> before the app starts, so a dark theme doesn't flash light.",
+      "files": [
+        {
+          "path": "registry/public/theme-init.js",
+          "type": "registry:file",
+          "target": "public/theme-init.js"
+        }
+      ]
+    },
+    {
+      "name": "theme-provider",
+      "type": "registry:component",
+      "title": "Theme provider",
+      "description": "Light, dark or the system's theme as a class on <html>, saved, and following the OS as it changes.",
+      "registryDependencies": ["@geekofia/theme-init"],
+      "files": [
+        {
+          "path": "registry/components/theme-provider.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "theme-toggle",
+      "type": "registry:component",
+      "title": "Theme toggle",
+      "description": "A button showing the theme on screen, with a menu to choose Light, Dark or System.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@geekofia/theme-provider"],
+      "files": [
+        {
+          "path": "registry/components/theme-toggle.tsx",
+          "type": "registry:component"
+        }
+      ]
+    }
+  ]
+}
