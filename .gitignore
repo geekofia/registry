@@ -1,0 +1,8 @@
+node_modules
+dist
+# Built by `npm run registry:build`; published by the Pages workflow.
+site/public/r
+*.log
+.DS_Store
+site/public/theme-init.js
+*.tsbuildinfo

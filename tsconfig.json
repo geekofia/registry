@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noEmit": true,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "types": ["vite/client", "node", "vitest/globals", "@testing-library/jest-dom"],
+    // Items import each other as they'll sit in a project (@/components/...);
+    // shadcn rewrites those to the project's own aliases when installing.
+    "paths": {
+      "@/components/*": ["./registry/components/*"],
+      "@/hooks/*": ["./registry/hooks/*"],
+      "@/lib/*": ["./registry/lib/*"]
+    }
+  },
+  "include": ["registry", "site/src", "scripts", "vite.config.ts", "test"]
+}
