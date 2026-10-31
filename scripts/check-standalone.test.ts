@@ -45,6 +45,24 @@ describe("check-standalone", () => {
     ]);
   });
 
+  it("lets an item's files import each other", () => {
+    expect(
+      problemsWith(
+        {
+          name: "markdown-lite",
+          files: [
+            { path: "registry/lib/markdown-lite.ts" },
+            { path: "registry/components/markdown-lite-text.tsx" },
+          ],
+        },
+        {
+          "registry/lib/markdown-lite.ts": "export const x = 1;",
+          "registry/components/markdown-lite-text.tsx": 'import { x } from "@/lib/markdown-lite";',
+        },
+      ),
+    ).toEqual([]);
+  });
+
   it("leaves stylesheets alone, whose comments may show an @import", () => {
     expect(
       problemsWith(

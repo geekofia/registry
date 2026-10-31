@@ -13,7 +13,7 @@ export type Item = {
 };
 
 /** The only npm packages an item may depend on. */
-export const ALLOWED_PACKAGES = ["@base-ui/react", "lucide-react"];
+export const ALLOWED_PACKAGES = ["@base-ui/react", "lucide-react", "@tanstack/react-table"];
 const ALWAYS = ["react", "react-dom"];
 const NAMESPACE = "@geekofia/";
 
@@ -38,6 +38,13 @@ export function problemsWith(item: Item, sources: Record<string, string>): strin
   const items = (item.registryDependencies ?? [])
     .filter((each) => each.startsWith(NAMESPACE))
     .map((each) => each.slice(NAMESPACE.length));
+  // Its own files, e.g. a component importing its item's @/lib/... parser.
+  const own = item.files.map((file) =>
+    file.path
+      .split("/")
+      .at(-1)!
+      .replace(/\.[^.]+$/, ""),
+  );
 
   for (const name of listed) {
     if (!ALLOWED_PACKAGES.includes(packageOf(name))) {
@@ -53,7 +60,7 @@ export function problemsWith(item: Item, sources: Record<string, string>): strin
         problems.push(`${item.name}: ${file.path} imports shadcn's ${specifier}`);
       } else if (specifier.startsWith("@/")) {
         const name = specifier.split("/").at(-1)!;
-        if (!items.includes(name)) {
+        if (!items.includes(name) && !own.includes(name)) {
           problems.push(
             `${item.name}: ${file.path} imports ${specifier} without @geekofia/${name}`,
           );
