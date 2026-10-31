@@ -6,6 +6,24 @@
 set -euo pipefail
 
 registry="$(pwd)"
+log="$(mktemp)"
+
+# Runs a step quietly; on failure, reports it with the end of its output as a
+# GitHub annotation (readable from the API, unlike the raw log) and stops.
+step() {
+  local name="$1"
+  shift
+  if ! "$@" >"$log" 2>&1; then
+    local tail
+    tail="$(tail -c 2500 "$log")"
+    tail="${tail//%/%25}"
+    tail="${tail//$'\n'/%0A}"
+    echo "::error title=smoke install: $name::$tail"
+    cat "$log"
+    exit 1
+  fi
+}
+
 port=4321
 project="$(mktemp -d)"
 trap 'kill "$server" 2>/dev/null || true; rm -rf "$project"' EXIT
@@ -18,8 +36,8 @@ cd "$project"
 cat > package.json <<JSON
 { "name": "smoke", "private": true, "type": "module" }
 JSON
-npm install --no-audit --no-fund react@19 react-dom@19 >/dev/null
-npm install --no-audit --no-fund -D typescript @types/react @types/react-dom tailwindcss@4 >/dev/null
+step "install react" npm install --no-audit --no-fund react@19 react-dom@19
+step "install tools" npm install --no-audit --no-fund -D typescript @types/react @types/react-dom tailwindcss@4
 mkdir -p src
 echo '@import "tailwindcss";' > src/index.css
 cat > tsconfig.json <<JSON
@@ -48,15 +66,13 @@ cat > components.json <<JSON
 }
 JSON
 
-npx --yes "shadcn@$(node -p "require('$registry/node_modules/shadcn/package.json').version")" \
-  add @geekofia/theme-toggle --yes
+shadcn="shadcn@$(node -p "require('$registry/node_modules/shadcn/package.json').version")"
+step "shadcn add" npx --yes "$shadcn" add @geekofia/theme-toggle --yes
 
 for file in src/components/theme-toggle.tsx src/components/theme-provider.tsx public/theme-init.js; do
-  test -f "$file" || { echo "missing $file"; exit 1; }
+  step "installed $file" test -f "$file"
 done
-if grep -rq "components/ui/" src/components; then
-  echo "an item imports shadcn's components/ui"; exit 1
-fi
+step "no shadcn ui imports" bash -c '! grep -rq "components/ui/" src/components' 
 cat > src/app.tsx <<TSX
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -67,5 +83,5 @@ export const App = () => (
   </ThemeProvider>
 );
 TSX
-npx tsc
+step "type-check" bash -c 'npx tsc || { find src public -type f; exit 1; }'
 echo "Installed and type-checked: theme-toggle, theme-provider, theme-init."
