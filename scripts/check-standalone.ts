@@ -13,7 +13,12 @@ export type Item = {
 };
 
 /** The only npm packages an item may depend on. */
-export const ALLOWED_PACKAGES = ["@base-ui/react", "lucide-react", "@tanstack/react-table"];
+export const ALLOWED_PACKAGES = [
+  "@base-ui/react",
+  "lucide-react",
+  "@tanstack/react-table",
+  "tailwind-merge",
+];
 const ALWAYS = ["react", "react-dom"];
 const NAMESPACE = "@geekofia/";
 

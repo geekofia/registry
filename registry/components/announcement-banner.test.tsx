@@ -31,6 +31,22 @@ describe("Announcement", () => {
     expect(screen.queryByRole("button", { name: "Show more" })).not.toBeInTheDocument();
   });
 
+  it("shows a caption, and lets classNames win over its own", () => {
+    render(
+      <Announcement
+        caption="From EaseHR"
+        body="Hi."
+        onDismiss={() => {}}
+        classNames={{ root: "px-8", dismiss: "rounded-full" }}
+      />,
+    );
+    expect(screen.getByText("From EaseHR")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveClass("px-8");
+    expect(screen.getByRole("status")).not.toHaveClass("px-4");
+    expect(screen.getByRole("button", { name: "Close" })).toHaveClass("rounded-full");
+    expect(screen.getByRole("button", { name: "Close" })).not.toHaveClass("rounded-md");
+  });
+
   it("gives each tone its colour and icon, an unknown one info's, and Close only when dismissible", async () => {
     const user = userEvent.setup();
     const dismiss = vi.fn();

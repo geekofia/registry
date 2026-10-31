@@ -36,6 +36,18 @@ describe("ThemeToggle", () => {
     expect(screen.queryByRole("menu")).not.toBeInTheDocument();
   });
 
+  it("lets classNames win over its own", () => {
+    fakeOs(false);
+    render(
+      <ThemeProvider>
+        <ThemeToggle classNames={{ trigger: "size-8 rounded-md" }} />
+      </ThemeProvider>,
+    );
+    const trigger = screen.getByRole("button", { name: "Theme" });
+    expect(trigger).toHaveClass("size-8", "rounded-md");
+    expect(trigger).not.toHaveClass("size-9");
+  });
+
   it("takes translated labels", async () => {
     const user = userEvent.setup();
     fakeOs(false);

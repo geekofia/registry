@@ -8,6 +8,7 @@ import {
   XIcon,
   type LucideIcon,
 } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 import { MarkdownLite } from "@/components/markdown-lite";
 import { parseMarkdownLite, plainText } from "@/lib/markdown-lite";
 
@@ -50,14 +51,18 @@ const ENGLISH: AnnouncementLabels = {
   showLess: "Show less",
 };
 
+/** Classes for its parts, winning over its own. */
+export type AnnouncementClassNames = { root?: string; dismiss?: string; more?: string };
+
 /**
  * A banner across the top of a page, or a notice card, in one of five tones:
  * a title on its own line and a body with a little Markdown. A banner folds a
  * long body (past `foldAfter` characters, or more than one paragraph or list)
- * to two lines with Show more; a notice shows it in full. Give `onDismiss` to
- * show Close.
+ * to two lines with Show more; a notice shows it in full. `caption` is a small
+ * line above the title, e.g. who it's from. Give `onDismiss` to show Close.
  */
 export function Announcement({
+  caption,
   title,
   body,
   tone = "info",
@@ -65,8 +70,9 @@ export function Announcement({
   onDismiss,
   foldAfter = 180,
   labels = ENGLISH,
-  className = "",
+  classNames = {},
 }: {
+  caption?: string;
   title?: string | null;
   body: string;
   tone?: Tone | string;
@@ -74,7 +80,7 @@ export function Announcement({
   onDismiss?: () => void;
   foldAfter?: number;
   labels?: AnnouncementLabels;
-  className?: string;
+  classNames?: AnnouncementClassNames;
 }) {
   const [open, setOpen] = useState(false);
   const look = TONES[tone as Tone] ?? TONES.info;
@@ -85,15 +91,19 @@ export function Announcement({
   return (
     <div
       role="status"
-      className={`flex items-start gap-3 text-sm ${
-        banner ? "px-4 py-2.5 md:px-6" : "rounded-xl border p-4"
-      } ${look.surface} ${className}`}
+      className={twMerge(
+        "flex items-start gap-3 text-sm",
+        banner ? "px-4 py-2.5 md:px-6" : "rounded-xl border p-4",
+        look.surface,
+        classNames.root,
+      )}
     >
       <Icon
         className={`mt-0.5 shrink-0 ${banner ? "size-4" : "size-5"} ${look.accent}`}
         aria-hidden
       />
       <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+        {caption && <span className="text-xs opacity-70">{caption}</span>}
         {title && <p className="font-semibold">{title}</p>}
         {long && !open ? (
           <p className="line-clamp-2 opacity-90">{plainText(body)}</p>
@@ -103,7 +113,10 @@ export function Announcement({
         {long && (
           <button
             type="button"
-            className="self-start text-xs font-medium underline underline-offset-4"
+            className={twMerge(
+              "self-start text-xs font-medium underline underline-offset-4",
+              classNames.more,
+            )}
             aria-expanded={open}
             onClick={() => setOpen(!open)}
           >
@@ -116,7 +129,10 @@ export function Announcement({
           type="button"
           aria-label={labels.dismiss}
           onClick={onDismiss}
-          className="hover:bg-foreground/10 focus-visible:ring-ring/50 -my-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md outline-none focus-visible:ring-[3px]"
+          className={twMerge(
+            "hover:bg-foreground/10 focus-visible:ring-ring/50 -my-1 inline-flex size-7 shrink-0 items-center justify-center rounded-md outline-none focus-visible:ring-[3px] pointer-coarse:size-10",
+            classNames.dismiss,
+          )}
         >
           <XIcon className="size-4" aria-hidden />
         </button>

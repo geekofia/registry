@@ -12,9 +12,32 @@ describe("theme-init.js", () => {
   });
   afterEach(() => vi.restoreAllMocks());
 
-  it("uses ThemeProvider's default key and theme", () => {
-    expect(script).toContain('var STORAGE_KEY = "theme";');
-    expect(script).toContain('var DEFAULT_THEME = "system";');
+  /** Runs it as if loaded from a <script> tag with these data- attributes. */
+  const runFromTag = (data: Record<string, string>) => {
+    const tag = document.createElement("script");
+    Object.assign(tag.dataset, data);
+    Object.defineProperty(document, "currentScript", { value: tag, configurable: true });
+    try {
+      run();
+    } finally {
+      Object.defineProperty(document, "currentScript", { value: null, configurable: true });
+    }
+  };
+
+  it("reads its key and default from its script tag, else ThemeProvider's", () => {
+    fakeOs(false);
+    localStorage.setItem("app-theme", "dark");
+    runFromTag({ storageKey: "app-theme" });
+    expect(root.className).toBe("dark");
+
+    root.className = "";
+    runFromTag({ storageKey: "other", defaultTheme: "dark" });
+    expect(root.className).toBe("dark");
+
+    root.className = "";
+    localStorage.setItem("theme", "dark");
+    run();
+    expect(root.className).toBe("dark");
   });
 
   it("sets the saved theme, or the OS's for System, and ignores unknown ones", () => {

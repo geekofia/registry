@@ -63,6 +63,15 @@ describe("DataTable", () => {
     expect(screen.getByRole("cell", { name: "asha@example.com" })).toHaveClass("md:table-cell");
   });
 
+  it("lets classNames win over its own", () => {
+    render(
+      <Table {...handlers()} classNames={{ search: "rounded-4xl", pageButton: "rounded-full" }} />,
+    );
+    expect(screen.getByRole("textbox", { name: "Search people" })).toHaveClass("rounded-4xl");
+    expect(screen.getByRole("textbox", { name: "Search people" })).not.toHaveClass("rounded-xl");
+    expect(screen.getByRole("button", { name: "Next" })).toHaveClass("rounded-full");
+  });
+
   it("sorts through the caller, showing the direction", async () => {
     const user = userEvent.setup();
     const on = handlers();

@@ -16,10 +16,13 @@ import ThemeDemo from "../../../components/demos/theme";
 ```tsx
 import { ThemeToggle } from "@/components/theme-toggle";
 
-<ThemeToggle labels={{ toggle: "Thème", light: "Clair", dark: "Sombre", system: "Système" }} />;
+<ThemeToggle
+  labels={{ toggle: "Thème", light: "Clair", dark: "Sombre", system: "Système" }}
+  classNames={{ trigger: "rounded-md" }}
+/>;
 ```
 
 Inside a [theme provider](/registry/components/theme-provider/). `labels` translates it;
-`className` is added to the button.
+`classNames` (`trigger`, `popup`, `item`) restyles it.
 
 <Install item="theme-toggle" />

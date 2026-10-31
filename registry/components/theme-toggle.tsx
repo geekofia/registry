@@ -1,5 +1,6 @@
 import { Menu } from "@base-ui/react/menu";
 import { CheckIcon, MonitorIcon, MoonIcon, SunIcon } from "lucide-react";
+import { twMerge } from "tailwind-merge";
 import { useTheme, type Theme } from "@/components/theme-provider";
 
 const ICONS = { light: SunIcon, dark: MoonIcon, system: MonitorIcon };
@@ -13,16 +14,19 @@ const ENGLISH: ThemeToggleLabels = {
   system: "System",
 };
 
+/** Classes for its parts, winning over its own. */
+export type ThemeToggleClassNames = { trigger?: string; popup?: string; item?: string };
+
 /**
  * A button showing the theme on screen, opening a menu to choose Light, Dark
- * or System. Pass `labels` to translate it.
+ * or System. Pass `labels` to translate it, and `classNames` to restyle it.
  */
 export function ThemeToggle({
   labels = ENGLISH,
-  className = "",
+  classNames = {},
 }: {
   labels?: ThemeToggleLabels;
-  className?: string;
+  classNames?: ThemeToggleClassNames;
 }) {
   const { theme, resolvedTheme, setTheme } = useTheme();
   const Shown = resolvedTheme === "dark" ? MoonIcon : SunIcon;
@@ -31,13 +35,21 @@ export function ThemeToggle({
     <Menu.Root>
       <Menu.Trigger
         aria-label={labels.toggle}
-        className={`text-foreground hover:bg-muted focus-visible:ring-ring/50 data-popup-open:bg-muted inline-flex size-9 items-center justify-center rounded-full outline-none focus-visible:ring-[3px] ${className}`}
+        className={twMerge(
+          "text-foreground hover:bg-muted focus-visible:ring-ring/50 data-popup-open:bg-muted inline-flex size-9 items-center justify-center rounded-full outline-none focus-visible:ring-[3px] pointer-coarse:size-11",
+          classNames.trigger,
+        )}
       >
         <Shown className="size-4" aria-hidden />
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner sideOffset={6} align="end" className="z-50">
-          <Menu.Popup className="bg-popover text-popover-foreground ring-foreground/10 min-w-36 rounded-xl p-1 text-sm shadow-lg ring-1 outline-none">
+          <Menu.Popup
+            className={twMerge(
+              "bg-popover text-popover-foreground ring-foreground/10 min-w-36 rounded-xl p-1 text-sm shadow-lg ring-1 outline-none",
+              classNames.popup,
+            )}
+          >
             <Menu.RadioGroup value={theme} onValueChange={(value) => setTheme(value as Theme)}>
               {(["light", "dark", "system"] as const).map((option) => {
                 const Icon = ICONS[option];
@@ -46,7 +58,10 @@ export function ThemeToggle({
                     key={option}
                     value={option}
                     closeOnClick
-                    className="data-highlighted:bg-muted relative flex cursor-default items-center gap-2 rounded-lg py-1.5 pr-8 pl-2 outline-none select-none"
+                    className={twMerge(
+                      "data-highlighted:bg-muted relative flex cursor-default items-center gap-2 rounded-lg py-1.5 pr-8 pl-2 outline-none select-none pointer-coarse:py-2.5",
+                      classNames.item,
+                    )}
                   >
                     <Icon className="text-muted-foreground size-4" aria-hidden />
                     {labels[option]}
