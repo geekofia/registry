@@ -4,6 +4,8 @@
 # items land where a project expects them, with imports that resolve. CI runs
 # it after `npm run registry:build`.
 set -euo pipefail
+# Any other failure, reported with its line and command.
+trap 'echo "::error title=smoke install: line $LINENO::$BASH_COMMAND"' ERR
 
 registry="$(pwd)"
 log="$(mktemp)"
