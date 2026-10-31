@@ -55,6 +55,131 @@
           "type": "registry:component"
         }
       ]
+    },
+    {
+      "name": "use-debounced-value",
+      "type": "registry:hook",
+      "title": "useDebouncedValue",
+      "description": "A value, once it has stopped changing for a while.",
+      "files": [
+        {
+          "path": "registry/hooks/use-debounced-value.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "use-media-query",
+      "type": "registry:hook",
+      "title": "useMediaQuery",
+      "description": "Whether a media query matches, kept up to date; useIsMobile for Tailwind's md.",
+      "files": [
+        {
+          "path": "registry/hooks/use-media-query.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "use-cursor-table-params",
+      "type": "registry:hook",
+      "title": "useCursorTableParams",
+      "description": "A server table's search, sort, page size and cursor, kept in the URL, with any router.",
+      "files": [
+        {
+          "path": "registry/hooks/use-cursor-table-params.ts",
+          "type": "registry:hook"
+        }
+      ]
+    },
+    {
+      "name": "markdown-lite",
+      "type": "registry:component",
+      "title": "Markdown lite",
+      "description": "Bold, lists and paragraphs from text people type, drawn as data, never HTML.",
+      "files": [
+        {
+          "path": "registry/lib/markdown-lite.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/components/markdown-lite.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "markdown-editor",
+      "type": "registry:component",
+      "title": "Markdown editor",
+      "description": "Write and Preview tabs with a toolbar for bold and lists, an optional title, and room for your own controls.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@geekofia/markdown-lite"],
+      "files": [
+        {
+          "path": "registry/lib/markdown-shortcuts.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "registry/components/markdown-editor.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "announcement-banner",
+      "type": "registry:component",
+      "title": "Announcement banner",
+      "description": "A banner or notice in one of five tones, with a little Markdown, folding long text, and an optional Close.",
+      "dependencies": ["lucide-react"],
+      "registryDependencies": ["@geekofia/markdown-lite"],
+      "files": [
+        {
+          "path": "registry/components/announcement-banner.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "async-multi-select",
+      "type": "registry:component",
+      "title": "Async multi-select",
+      "description": "Several options from a server search, as chips, with an optional All option; Escape keeps the choice.",
+      "dependencies": ["@base-ui/react", "lucide-react"],
+      "registryDependencies": ["@geekofia/use-debounced-value"],
+      "files": [
+        {
+          "path": "registry/components/async-multi-select.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:component",
+      "title": "Switch",
+      "description": "An on/off switch: Base UI's, with shadcn's colours.",
+      "dependencies": ["@base-ui/react"],
+      "files": [
+        {
+          "path": "registry/components/switch.tsx",
+          "type": "registry:component"
+        }
+      ]
+    },
+    {
+      "name": "data-table",
+      "type": "registry:component",
+      "title": "Data table",
+      "description": "A server-driven table: debounced search, sorting and next/previous pages, on TanStack Table.",
+      "dependencies": ["@tanstack/react-table", "lucide-react"],
+      "registryDependencies": ["@geekofia/use-debounced-value"],
+      "files": [
+        {
+          "path": "registry/components/data-table.tsx",
+          "type": "registry:component"
+        }
+      ]
     }
   ]
 }

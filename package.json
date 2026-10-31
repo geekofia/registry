@@ -6,15 +6,16 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "npm run registry:build && vite",
-    "build": "npm run registry:build && vite build",
-    "registry:build": "shadcn build --output site/public/r && cp registry/public/theme-init.js site/public/theme-init.js",
+    "dev": "npm run registry:build && astro dev",
+    "build": "npm run registry:build && astro build",
+    "registry:build": "shadcn build --output public/r && cp registry/public/theme-init.js public/theme-init.js",
     "typecheck": "tsc -b",
     "test": "vitest run",
     "lint": "eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check:standalone": "node scripts/check-standalone.ts"
+    "check:standalone": "node scripts/check-standalone.ts",
+    "preview": "astro preview"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -23,8 +24,12 @@
     "react-dom": "^19.3.1"
   },
   "devDependencies": {
+    "@astrojs/react": "^7.1.2",
+    "@astrojs/starlight": "^0.42.8",
+    "@astrojs/starlight-tailwind": "^5.0.0",
     "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.3.3",
+    "@tanstack/react-table": "^9.3.1",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@testing-library/user-event": "^14.6.8",
@@ -32,6 +37,7 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.2",
+    "astro": "^7.4.4",
     "eslint": "^10.14.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react-hooks": "^7.1.1",
